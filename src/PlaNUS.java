@@ -49,7 +49,7 @@ public class PlaNUS {
             break;
         case COMMAND_ADD:
             String commandArgs = commandTypeAndParams[1];
-            executeAddTask(commandArgs);
+            AddTask(commandArgs);
             break;
         case COMMAND_LIST:
             showList();
@@ -72,124 +72,40 @@ public class PlaNUS {
         return userInput.split(" ", 2);
     }
 
-    private static void executeAddTask(String commandArgs) {
+    private static void AddTask(String commandArgs) {
+        String description = "";
+        String date = "";
+        String time = "";
+        String priority = "";
+        if (commandArgs.contains("d/")) {
+            int descriptionEndIndex = commandArgs.indexOf("/") - 2;
+            int dateBeginIndex = commandArgs.indexOf("d/") + 2;
+            int dateEndIndex = (commandArgs.substring(dateBeginIndex).contains("/")) ? commandArgs.indexOf("/", dateBeginIndex) - 2 : commandArgs.length();
+            description = commandArgs.substring(0, descriptionEndIndex);
+            date = commandArgs.substring(dateBeginIndex,dateEndIndex);
+        }
+        if (commandArgs.contains("t/")) {
+            int descriptionEndIndex = commandArgs.indexOf("/") - 2;
+            int timeBeginIndex = commandArgs.indexOf("t/") + 2;
+            int timeEndIndex = (commandArgs.substring(timeBeginIndex).contains("/")) ? commandArgs.indexOf("/", timeBeginIndex) - 2 : commandArgs.length();
+            description = commandArgs.substring(0, descriptionEndIndex);
+            time = commandArgs.substring(timeBeginIndex, timeEndIndex);
+        }
+        if (commandArgs.contains("p/")) {
+            int descriptionEndIndex = commandArgs.indexOf("/") - 2;
+            int priorityBeginIndex = commandArgs.indexOf("p/") + 2;
+            int priorityEndIndex = (commandArgs.substring(priorityBeginIndex).contains("/")) ? commandArgs.indexOf("/", priorityBeginIndex) - 2 : commandArgs.length();
+            description = commandArgs.substring(0, descriptionEndIndex);
+            priority = commandArgs.substring(priorityBeginIndex, priorityEndIndex);
+        }
+        if (!(commandArgs.contains("d/") || commandArgs.contains("t/") || commandArgs.contains("p/"))) {
+            description = commandArgs;
+        }
+        Task task = new Task(description, date, time, priority);
+        tasks.add(task);
         System.out.println("\nTask added:");
-        if (commandArgs.contains("d/") && commandArgs.contains("t/") && commandArgs.contains("p/")) {
-            addTaskWithDateAndTimeAndPriority(commandArgs);
-        }
-        else if (commandArgs.contains("d/") && commandArgs.contains("t/")) {
-            addTaskWithDateAndTime(commandArgs);
-        }
-        else if (commandArgs.contains("d/") && commandArgs.contains("p/")) {
-            addTaskWithDateAndPriority(commandArgs);
-        }
-        else if (commandArgs.contains("t/") && commandArgs.contains("p/")) {
-            addTaskWithTimeAndPriority(commandArgs);
-        }
-        else if (commandArgs.contains("d/")) {
-            addTaskWithDate(commandArgs);
-        }
-        else if (commandArgs.contains("t/")) {
-            addTaskWithTime(commandArgs);
-        }
-        else if (commandArgs.contains("p/")) {
-            addTaskWithPriority(commandArgs);
-        }
-        else {
-            addTask(commandArgs);
-        }
+        System.out.println(task.toString());
         System.out.println("Now you have " + tasks.size() + " task(s) in your list.\n");
-    }
-
-    private static void addTask(String commandArgs) {
-        Task task = new Task(commandArgs);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithPriority(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int priorityBeginIndex = commandArgs.indexOf("p/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String priority = commandArgs.substring(priorityBeginIndex);
-        TaskWithPriority task = new TaskWithPriority(description, priority);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithTime(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int timeBeginIndex = commandArgs.indexOf("t/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String time = commandArgs.substring(timeBeginIndex);
-        TaskWithTime task = new TaskWithTime(description, time);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithDate(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int dateBeginIndex = commandArgs.indexOf("d/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String date = commandArgs.substring(dateBeginIndex);
-        TaskWithDate task= new TaskWithDate(description, date);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithTimeAndPriority(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int timeBeginIndex = commandArgs.indexOf("t/") + 2;
-        int timeEndIndex = commandArgs.indexOf(" ", timeBeginIndex);
-        int priorityBeginIndex = commandArgs.indexOf("p/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String time = commandArgs.substring(timeBeginIndex, timeEndIndex);
-        String priority = commandArgs.substring(priorityBeginIndex);
-        TaskWithTimeAndPriority task = new TaskWithTimeAndPriority(description, time, priority);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithDateAndPriority(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int dateBeginIndex = commandArgs.indexOf("d/") + 2;
-        int dateEndIndex = commandArgs.indexOf(" ", dateBeginIndex);
-        int priorityBeginIndex = commandArgs.indexOf("p/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String date = commandArgs.substring(dateBeginIndex, dateEndIndex);
-        String priority = commandArgs.substring(priorityBeginIndex);
-        TaskWithDateAndPriority task = new TaskWithDateAndPriority(description, date, priority);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithDateAndTime(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int dateBeginIndex = commandArgs.indexOf("d/") + 2;
-        int dateEndIndex = commandArgs.indexOf(" ", dateBeginIndex);
-        int timeBeginIndex = commandArgs.indexOf("t/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String date = commandArgs.substring(dateBeginIndex, dateEndIndex);
-        String time = commandArgs.substring(timeBeginIndex);
-        TaskWithDateAndTime task = new TaskWithDateAndTime(description, date, time);
-        tasks.add(task);
-        System.out.println(task.toString());
-    }
-
-    private static void addTaskWithDateAndTimeAndPriority(String commandArgs) {
-        int descriptionEndIndex = commandArgs.indexOf("/") - 2;
-        int dateBeginIndex = commandArgs.indexOf("d/") + 2;
-        int dateEndIndex = commandArgs.indexOf(" ", dateBeginIndex);
-        int timeBeginIndex = commandArgs.indexOf("t/") + 2;
-        int timeEndIndex = commandArgs.indexOf(" ", timeBeginIndex);
-        int priorityBeginIndex = commandArgs.indexOf("p/") + 2;
-        String description = commandArgs.substring(0, descriptionEndIndex);
-        String date = commandArgs.substring(dateBeginIndex, dateEndIndex);
-        String time = commandArgs.substring(timeBeginIndex, timeEndIndex);
-        String priority = commandArgs.substring(priorityBeginIndex);
-        TaskWithDateAndTimeAndPriority task = new TaskWithDateAndTimeAndPriority(description, date, time, priority);
-        tasks.add(task);
-        System.out.println(task.toString());
     }
 
     private static void showList() {
