@@ -11,8 +11,11 @@ public class PlaNUS {
     public static final String COMMAND_BYE = "bye";
     private static ArrayList<Task> tasks;
     private static boolean isExit;
-    private static final Pattern TASK_PATTERN = Pattern.compile("^(?<description>.*)\\s*d/(?<date>\\d{2}-\\d{2}-\\d{4})?\\s*" +
-            "t/(?<time>\\d{4})?\\s*p/(?<priority>\\d)?$");
+    private static final Pattern TASK_PATTERN = Pattern.compile(
+            "^(?<description>(\\w+\\s*)+\\w*)" +
+            "( d/(?<date>\\d{2}-\\d{2}-\\d{4}))?" +
+            "( t/(?<time>\\d{4}))?" +
+            "( p/(?<priority>\\d))?$");
 
     public static void main(String[] args) {
         showWelcomeMessage();
